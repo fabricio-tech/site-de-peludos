@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, PawPrint } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -12,9 +12,12 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <Heart className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
+            <div className="relative">
+              <Heart className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
+              <PawPrint className="h-4 w-4 text-accent absolute -bottom-1 -right-1 group-hover:rotate-12 transition-transform" />
+            </div>
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              AdoPet
+              Amor em Patas
             </span>
           </Link>
 
@@ -31,6 +34,11 @@ const Navbar = () => {
             </Link>
             <Link to="#contato" className="text-foreground hover:text-primary transition-colors font-medium">
               Contato
+            </Link>
+            <Link to="/colaboradores">
+              <Button variant="outline" size="sm">
+                Colaboradores
+              </Button>
             </Link>
             <Link to="/login">
               <Button variant="hero" size="sm">
@@ -79,6 +87,11 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Contato
+            </Link>
+            <Link to="/colaboradores" onClick={() => setIsMenuOpen(false)}>
+              <Button variant="outline" size="sm" className="w-full mb-2">
+                Colaboradores
+              </Button>
             </Link>
             <Link to="/login" onClick={() => setIsMenuOpen(false)}>
               <Button variant="hero" size="sm" className="w-full">

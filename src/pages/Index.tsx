@@ -117,7 +117,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-card border-t border-border py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; 2024 AdoPet. Feito com ❤️ para os animais.</p>
+          <p>&copy; 2024 Amor em Patas. Feito com ❤️ para os animais.</p>
         </div>
       </footer>
     </div>
