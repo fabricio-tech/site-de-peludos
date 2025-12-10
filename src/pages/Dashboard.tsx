@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, PawPrint, User, LogOut } from "lucide-react";
+import { Heart, PawPrint, User, LogOut, Dog, Cat, Bird } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -15,6 +15,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Animal form state
   const [animalData, setAnimalData] = useState({
@@ -56,12 +57,12 @@ const Dashboard = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Animal cadastrado!",
-        description: `${animalData.name} foi cadastrado com sucesso.`,
-      });
-
       setAnimalData({ name: "", type: "", breed: "", age: "", description: "" });
+      setShowSuccess(true);
+      
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 4000);
     } catch (error: any) {
       toast({
         title: "Erro",
@@ -104,7 +105,31 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background p-4 relative">
+      {/* Success Animation Overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-background/90 backdrop-blur-sm z-50 flex items-center justify-center animate-fade-in">
+          <div className="text-center animate-scale-in">
+            <div className="flex justify-center gap-4 mb-6">
+              <Dog className="h-16 w-16 text-primary animate-bounce" style={{ animationDelay: "0ms" }} />
+              <Cat className="h-16 w-16 text-accent animate-bounce" style={{ animationDelay: "150ms" }} />
+              <Bird className="h-16 w-16 text-primary animate-bounce" style={{ animationDelay: "300ms" }} />
+            </div>
+            <div className="flex justify-center gap-2 mb-4">
+              <Heart className="h-8 w-8 text-destructive animate-pulse" />
+              <PawPrint className="h-8 w-8 text-primary animate-pulse" style={{ animationDelay: "100ms" }} />
+              <Heart className="h-8 w-8 text-destructive animate-pulse" style={{ animationDelay: "200ms" }} />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              Obrigado pelo Cadastro! 🎉
+            </h2>
+            <p className="text-muted-foreground">
+              Seu amiguinho está pronto para encontrar um novo lar!
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
