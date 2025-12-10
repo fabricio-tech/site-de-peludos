@@ -19,45 +19,16 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        if (error.message.includes("Invalid login credentials")) {
-          toast({
-            title: "Erro",
-            description: "Email ou senha incorretos.",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Erro",
-            description: error.message,
-            variant: "destructive",
-          });
-        }
-        return;
-      }
-
-      if (data.user) {
-        toast({
-          title: "Bem-vindo de volta! 🎉",
-          description: "Login realizado com sucesso.",
-        });
-        navigate("/dashboard");
-      }
-    } catch (error: any) {
-      toast({
-        title: "Erro",
-        description: "Ocorreu um erro ao fazer login.",
-        variant: "destructive",
-      });
-    } finally {
+    // Para fins de apresentação - acesso direto
+    toast({
+      title: "Bem-vindo! 🎉",
+      description: "Acesso liberado para apresentação.",
+    });
+    
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      navigate("/dashboard");
+    }, 500);
   };
 
   return (
