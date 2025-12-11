@@ -7,9 +7,75 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, PawPrint, User, LogOut, Dog, Cat, Bird } from "lucide-react";
+import { Heart, PawPrint, User, LogOut, Dog, Cat, Bird, Rabbit, Fish } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+const animalGallery = [
+  {
+    id: 1,
+    name: "Papagaio Verde",
+    type: "Ave",
+    image: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=400",
+    description: "Papagaio colorido e falante, adora interagir com pessoas. Vive em média 50 anos e precisa de muito carinho e atenção.",
+  },
+  {
+    id: 2,
+    name: "Calopsita",
+    type: "Ave",
+    image: "https://images.unsplash.com/photo-1591608971362-f08b2a75731a?w=400",
+    description: "Ave dócil e carinhosa, perfeita para apartamentos. Canta lindas melodias e se apega facilmente aos donos.",
+  },
+  {
+    id: 3,
+    name: "Iguana Verde",
+    type: "Réptil",
+    image: "https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?w=400",
+    description: "Lagarto herbívoro de grande porte. Precisa de terrário espaçoso com aquecimento e iluminação UVB.",
+  },
+  {
+    id: 4,
+    name: "Gecko Leopardo",
+    type: "Réptil",
+    image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400",
+    description: "Pequeno lagarto noturno, fácil de cuidar. Ideal para iniciantes em répteis, vive até 20 anos.",
+  },
+  {
+    id: 5,
+    name: "Porquinho da Índia",
+    type: "Roedor",
+    image: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=400",
+    description: "Roedor sociável e carinhoso. Precisa de companhia e espaço para correr. Emite sons adoráveis.",
+  },
+  {
+    id: 6,
+    name: "Coelho Anão",
+    type: "Roedor",
+    image: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=400",
+    description: "Coelho pequeno e fofo, perfeito para famílias. Muito brincalhão e pode ser treinado para usar liteira.",
+  },
+  {
+    id: 7,
+    name: "Peixe Betta",
+    type: "Peixe",
+    image: "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=400",
+    description: "Peixe ornamental de cores vibrantes. Fácil de cuidar, ideal para aquários pequenos.",
+  },
+  {
+    id: 8,
+    name: "Hamster Sírio",
+    type: "Roedor",
+    image: "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=400",
+    description: "Pequeno roedor noturno, independente e curioso. Adora correr na rodinha e armazenar comida.",
+  },
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -104,6 +170,16 @@ const Dashboard = () => {
     }
   };
 
+  const getAnimalIcon = (type: string) => {
+    switch (type) {
+      case "Ave": return Bird;
+      case "Réptil": return PawPrint;
+      case "Roedor": return Rabbit;
+      case "Peixe": return Fish;
+      default: return PawPrint;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background p-4 relative">
       {/* Success Animation Overlay */}
@@ -130,13 +206,13 @@ const Dashboard = () => {
         </div>
       )}
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Heart className="h-6 w-6 text-primary" />
             <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              AdoPet
+              Amor em Patas
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
@@ -146,17 +222,85 @@ const Dashboard = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="animal" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 h-9">
+        <Tabs defaultValue="gallery" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 h-9">
+            <TabsTrigger value="gallery" className="text-sm">
+              <Heart className="h-4 w-4 mr-1" />
+              Animais
+            </TabsTrigger>
             <TabsTrigger value="animal" className="text-sm">
               <PawPrint className="h-4 w-4 mr-1" />
-              Cadastrar Animal
+              Cadastrar
             </TabsTrigger>
             <TabsTrigger value="person" className="text-sm">
               <User className="h-4 w-4 mr-1" />
-              Meu Perfil
+              Perfil
             </TabsTrigger>
           </TabsList>
+
+          {/* Animal Gallery */}
+          <TabsContent value="gallery">
+            <div className="mb-4">
+              <h2 className="text-xl font-bold text-foreground mb-1">Conheça Nossos Animais</h2>
+              <p className="text-sm text-muted-foreground">Aves, répteis, roedores e muito mais esperando por você!</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {animalGallery.map((animal) => {
+                const IconComponent = getAnimalIcon(animal.type);
+                return (
+                  <Dialog key={animal.id}>
+                    <DialogTrigger asChild>
+                      <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                        <div className="relative aspect-square overflow-hidden">
+                          <img
+                            src={animal.image}
+                            alt={animal.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm px-2 py-1 rounded-full">
+                            <span className="text-xs font-medium text-foreground">{animal.type}</span>
+                          </div>
+                        </div>
+                        <CardContent className="p-2">
+                          <h3 className="font-semibold text-sm truncate">{animal.name}</h3>
+                        </CardContent>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                          <IconComponent className="h-5 w-5 text-primary" />
+                          {animal.name}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div className="rounded-lg overflow-hidden aspect-video">
+                          <img
+                            src={animal.image}
+                            alt={animal.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
+                            {animal.type}
+                          </span>
+                        </div>
+                        <div className="bg-muted/50 rounded-lg p-4">
+                          <h4 className="font-semibold mb-2">Sobre {animal.name}</h4>
+                          <p className="text-sm text-foreground/80 leading-relaxed">{animal.description}</p>
+                        </div>
+                        <Button className="w-full">
+                          <Heart className="h-4 w-4 mr-2" />
+                          Tenho Interesse
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                );
+              })}
+            </div>
+          </TabsContent>
 
           {/* Animal Registration */}
           <TabsContent value="animal">
@@ -192,7 +336,10 @@ const Dashboard = () => {
                         <SelectContent>
                           <SelectItem value="Cachorro">Cachorro</SelectItem>
                           <SelectItem value="Gato">Gato</SelectItem>
-                          <SelectItem value="Pássaro">Pássaro</SelectItem>
+                          <SelectItem value="Ave">Ave</SelectItem>
+                          <SelectItem value="Réptil">Réptil</SelectItem>
+                          <SelectItem value="Roedor">Roedor</SelectItem>
+                          <SelectItem value="Peixe">Peixe</SelectItem>
                           <SelectItem value="Outro">Outro</SelectItem>
                         </SelectContent>
                       </Select>
@@ -229,7 +376,7 @@ const Dashboard = () => {
                       className="text-sm min-h-[60px]"
                     />
                   </div>
-                  <Button type="submit" className="w-full h-8" disabled={isLoading} variant="hero">
+                  <Button type="submit" className="w-full h-8" disabled={isLoading}>
                     {isLoading ? "Salvando..." : "Cadastrar Animal"}
                   </Button>
                 </form>
@@ -279,7 +426,7 @@ const Dashboard = () => {
                       className="h-8 text-sm"
                     />
                   </div>
-                  <Button type="submit" className="w-full h-8" disabled={isLoading} variant="hero">
+                  <Button type="submit" className="w-full h-8" disabled={isLoading}>
                     {isLoading ? "Salvando..." : "Salvar Perfil"}
                   </Button>
                 </form>
