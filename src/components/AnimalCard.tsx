@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, PawPrint, Calendar, Dog, Cat } from "lucide-react";
+import { Heart, PawPrint, Calendar, Dog, Cat, Phone, Mail } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +19,7 @@ interface AnimalCardProps {
 }
 
 const AnimalCard = ({ name, age, type, image, description }: AnimalCardProps) => {
+  const [showAdoptInfo, setShowAdoptInfo] = useState(false);
   const AnimalIcon = type === "Cachorro" ? Dog : Cat;
 
   return (
@@ -55,7 +57,7 @@ const AnimalCard = ({ name, age, type, image, description }: AnimalCardProps) =>
         </CardContent>
       </Card>
 
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <AnimalIcon className="h-6 w-6 text-primary" />
@@ -87,16 +89,51 @@ const AnimalCard = ({ name, age, type, image, description }: AnimalCardProps) =>
             <h4 className="font-semibold mb-2 text-foreground">Sobre {name}</h4>
             <p className="text-foreground/80 leading-relaxed">{description}</p>
           </div>
-          
-          <div className="flex gap-2">
-            <Button className="flex-1">
-              <Heart className="h-4 w-4 mr-2" />
-              Quero Adotar
-            </Button>
-            <Button variant="outline" className="flex-1">
-              Mais Informações
-            </Button>
+
+          <div className="bg-primary/10 rounded-lg p-4 border border-primary/20">
+            <h4 className="font-semibold mb-2 text-primary flex items-center gap-2">
+              <Heart className="h-4 w-4" />
+              Por que adotar?
+            </h4>
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              Adotar um animal é um ato de amor que transforma vidas. {name} está esperando por você 
+              para compartilhar momentos de alegria, carinho e companheirismo. Ao adotar, você não 
+              apenas ganha um amigo fiel, mas também abre espaço para que outro animal seja resgatado.
+            </p>
           </div>
+          
+          {!showAdoptInfo ? (
+            <div className="flex gap-2">
+              <Button className="flex-1" onClick={() => setShowAdoptInfo(true)}>
+                <Heart className="h-4 w-4 mr-2" />
+                Quero Adotar
+              </Button>
+            </div>
+          ) : (
+            <div className="bg-accent/20 rounded-lg p-4 border border-accent/30 animate-fade-in">
+              <h4 className="font-semibold mb-3 text-accent-foreground flex items-center gap-2">
+                <PawPrint className="h-5 w-5 text-primary" />
+                Entre em contato conosco!
+              </h4>
+              <p className="text-sm text-foreground/80 mb-3">
+                Ficamos felizes com seu interesse em adotar {name}! Para dar continuidade ao processo 
+                de adoção, entre em contato pelos canais abaixo:
+              </p>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2 text-foreground">
+                  <Phone className="h-4 w-4 text-primary" />
+                  <span>(11) 99999-9999</span>
+                </div>
+                <div className="flex items-center gap-2 text-foreground">
+                  <Mail className="h-4 w-4 text-primary" />
+                  <span>adocao@amorempatas.com.br</span>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                Horário de atendimento: Seg a Sex, 9h às 18h
+              </p>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
