@@ -90,6 +90,7 @@ const Dashboard = () => {
     breed: "",
     age: "",
     description: "",
+    imageUrl: "",
   });
 
   // Person form state
@@ -117,13 +118,14 @@ const Dashboard = () => {
         breed: animalData.breed || null,
         age: animalData.age,
         description: animalData.description || null,
+        image_url: animalData.imageUrl || null,
         created_by: user?.id,
         status: "available",
       });
 
       if (error) throw error;
 
-      setAnimalData({ name: "", type: "", breed: "", age: "", description: "" });
+      setAnimalData({ name: "", type: "", breed: "", age: "", description: "", imageUrl: "" });
       setShowSuccess(true);
       
       setTimeout(() => {
@@ -374,6 +376,16 @@ const Dashboard = () => {
                       value={animalData.description}
                       onChange={(e) => setAnimalData({ ...animalData, description: e.target.value })}
                       className="text-sm min-h-[60px]"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="animalImage" className="text-xs">URL da Imagem</Label>
+                    <Input
+                      id="animalImage"
+                      value={animalData.imageUrl}
+                      onChange={(e) => setAnimalData({ ...animalData, imageUrl: e.target.value })}
+                      placeholder="https://exemplo.com/foto.jpg"
+                      className="h-8 text-sm"
                     />
                   </div>
                   <Button type="submit" className="w-full h-8" disabled={isLoading}>
